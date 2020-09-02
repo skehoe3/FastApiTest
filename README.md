@@ -6,3 +6,9 @@ Song Similarity Project  - use the protest song playlist as inspiration
 
 
 run the component by: uvicorn main:app --reload
+
+# Documentation
+NOTE: The app must be running for these pages to show anything
+ 
+* View your own apps docs: http://127.0.0.1:8000/docs
+* An alternative set of docs: http://127.0.0.1:8000/redoc

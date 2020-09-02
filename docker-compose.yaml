@@ -1,0 +1,11 @@
+version: "3.7"
+services:
+  database:
+    image: "mongo"
+    container_name: "FastMongo"
+    environment:
+      - MONGO_INITDB_DATABASE=fast-mongo
+    volumes:
+      - ./mongo-volume:/data/db
+    ports:
+      - 27000:27017
