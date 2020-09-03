@@ -1,6 +1,7 @@
 from typing import List, Optional
 
 from bson.objectid import ObjectId
+import datetime
 from pydantic import BaseModel, validator
 
 # some values are optional, and if not explicitly passed *are* allowed
@@ -13,9 +14,9 @@ class Song(BaseModel):
     category: List[str]
     title: Optional[str]
     _id = ObjectId()
-    # timestamp
+    tsmp = datetime.datetime.now()
 
-    # todo: set up a logger
+    # todo: prevent addition of duplicates
 
     @validator("lyrics", "artist", "category", "title")
     def non_empty(cls, v):

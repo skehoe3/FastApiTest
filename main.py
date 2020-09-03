@@ -16,6 +16,7 @@ from src.db_interface import Storage
 from src.pydantic_models import Song
 import json
 
+
 app = FastAPI()
 DB = Storage()
 
@@ -29,10 +30,17 @@ async def post_song(song_lyrics: Song):
         return {"statusMessage": "Beep boop you made an oop", "Exception": error}
 
 
+@app.get("/v1/lyrics")
+async def get_song():
+    try:
+        return DB.get_many_songs_v1()
+    except Exception as error:
+        return {"statusMessage": "Beep boop you made an oop", "Exception": error}
+
+
 @app.get("/v1/lyrics/{_id}")
 async def get_song(_id: str):
     try:
         return DB.get_song_v1(_id)
-
     except Exception as error:
         return {"statusMessage": "Beep boop you made an oop", "Exception": error}

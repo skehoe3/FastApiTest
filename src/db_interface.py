@@ -4,6 +4,7 @@ This file contains all functions required to interact with the database.
 
 import pymongo
 from bson.objectid import ObjectId
+from collections import defaultdict
 
 
 class Storage:
@@ -23,8 +24,25 @@ class Storage:
 
     def get_song_v1(self, _id=None):
         try:
-            if _id:
-                return self.db["songs"].find_one(ObjectId(_id))
-            return self.db["songs"].find()
+            resp = defaultdict()
+            result = self.db["songs"].find_one(ObjectId(_id))
+            # todo refactor as dictionary comprehension
+            for i in result.keys():
+                resp[i] = str(result[i]) if isinstance(
+                    result[i], ObjectId) else result[i]
+            return resp
+        except Exception as error:
+            print(f"whoooa there: {error}")
+
+    def get_many_songs_v1(self):
+        try:
+            resp = []
+
+            result = self.db["songs"].find({})
+            for i in result:
+                resp.append({x: (str(i[x]) if isinstance(i[x], ObjectId) else i[x])
+                             for x in i.keys()})
+            return {"result": resp}
+
         except Exception as error:
             print(f"whoooa there: {error}")
