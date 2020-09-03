@@ -3,13 +3,17 @@ from typing import List, Optional
 from bson.objectid import ObjectId
 from pydantic import BaseModel, validator
 
+# some values are optional, and if not explicitly passed *are* allowed
+# to be null.  As such, we don't use the * notation to check for validity
+
 
 class Song(BaseModel):
-    artist: str = None
+    artist: Optional[str]
     lyrics: str
     category: List[str]
     title: Optional[str]
     _id = ObjectId()
+    # timestamp
 
     # todo: set up a logger
 
@@ -17,16 +21,9 @@ class Song(BaseModel):
     def non_empty(cls, v):
         #! CANNOT do on category as category is a list!
         if len(v) == 0:
-            print("hello ", str(set(v)))
             raise ValueError(
                 "Value cannot be empty!")
         return v
-
-    @validator("lyrics", "artist", "title")
-    def more_than_whitespace(cls, v):
-        if v.isspace():
-            raise ValueError(
-                "Value cannot be only strings!")
 
     @validator("category")
     def list_has_strings(cls, v):

@@ -14,23 +14,17 @@ from fastapi import Body, FastAPI
 
 from src.db_interface import Storage
 from src.pydantic_models import Song
-
+import json
 
 app = FastAPI()
 DB = Storage()
-# logger = logging.basicConfig(level=__debug__)
-
-#! this is returing null when it should be raising an exception as its missing mandatory values
 
 
-@app.post("/v1/lyrics/")
+@app.post("/v1/lyrics")
 async def post_song(song_lyrics: Song):
-
-    # return song_lyrics #this returns empty though
     try:
         song = DB.insert_lyrics_v1(song_lyrics)
         return {"_id": str(song_lyrics._id)}
-    #!part of the problem is i send over a dictionary i think
     except Exception as error:
         return {"statusMessage": "Beep boop you made an oop", "Exception": error}
 
