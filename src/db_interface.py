@@ -10,11 +10,21 @@ from collections import defaultdict
 class Storage:
 
     def __init__(self):
-        # ok so the DB is, in fact, there.  I can get to it over dbCompass
         self.client = pymongo.MongoClient('mongodb://localhost:27000/')
         self.db = self.client['fast-mongo']
 
+    def insert_value(self, val, database):
+        self.db[database].insert_one(dict(val))
+
     def insert_lyrics_v1(self, song):
+        """
+        Add lyrics to db
+        Args:
+            song (obj): pydantic song object
+
+        Returns:
+            dict: data from the db
+        """
         try:
             songs = self.db.songs
             self.db["songs"].insert_one(dict(song))
@@ -22,7 +32,16 @@ class Storage:
         except Exception as error:
             print(f"whoooa there: {error}")
 
-    def get_song_v1(self, _id=None):
+    def get_song_v1(self, _id):
+        """
+        Get a single song from the db
+
+        Args:
+            _id (string, optional): ObjectId in string form for a song in the db
+
+        Returns:
+            dict: details of the song
+        """
         try:
             resp = defaultdict()
             result = self.db["songs"].find_one(ObjectId(_id))
@@ -35,6 +54,11 @@ class Storage:
             print(f"whoooa there: {error}")
 
     def get_many_songs_v1(self):
+        """
+        get the details for all songs in the db
+        Returns:
+            dict: dictionary of all songs in the db
+        """
         try:
             resp = []
 
