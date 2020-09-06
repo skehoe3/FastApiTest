@@ -14,7 +14,24 @@ class Storage:
         self.db = self.client['fast-mongo']
 
     def insert_value(self, val, database):
+        """
+        insert a single value into the db
+
+        Args:
+            val (json): data to be inserted
+            database (str): name of the db the data should be added to
+        """
         self.db[database].insert_one(dict(val))
+
+    def insert_multiple_values(self, vals, database):
+        """
+        insert a single value into the db
+
+        Args:
+            val (list): list of json data points to be inserted
+            database (str): name of the db the data should be added to
+        """
+        self.db[database].insert_many(vals)
 
     def insert_lyrics_v1(self, song):
         """

@@ -71,12 +71,20 @@ async def get_song(_id: str):
 
 @app.post("/v1/fileToDb")
 async def csv_to_db(file: UploadFile = File(...), db_name: str = Body(...)):
-    # this endpoint takes in a file of type csv, parses it, and adds
-    # each entry to the db
+    """
+    read in a csv file and add it to the db under the given DB name
+
+    Args:
+        file (UploadFile, optional): [description]. Defaults to File(...).
+        db_name (str, optional): [description]. Defaults to Body(...).
+
+        Returns:
+        json: name of the db the data was added to, and a list of the ids added 
+    """
+
+    # TODO: add a check so that can only add to existing DBs.
     #! currently everything is held in memory for some stupid reason....
     #! use the rollover function to put a stop to that nonesense
-    print("took in the file!")
-    # file is here still an UploadFile object... convert to bytes object before sending to preproces
-    formatted = preprocess.csv_to_json(file.file, db_name)
+    preprocess.csv_to_json(file.file, db_name)
 
-    pass
+    return {"db_name": db_name, "_ids": []}
